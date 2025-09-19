@@ -6,7 +6,10 @@ import b.s.wordle.dto.WordleGameState;
 import b.s.wordle.service.WordleGameService;
 import b.s.wordle.view.GameView;
 
+import static b.s.wordle.constant.GameConstants.GIVE_UP;
+
 public class GameController {
+
 
     private final GameView gameView;
     private final WordleGameService wordleGameService;
@@ -42,7 +45,7 @@ public class GameController {
             if(input.trim().isEmpty()) continue;
 
             //give up!
-            if(input.equalsIgnoreCase("x")) {
+            if(input.equalsIgnoreCase(GIVE_UP)) {
                 gameView.clearView();
                 gameView.showMenuOptions();
                 return;
