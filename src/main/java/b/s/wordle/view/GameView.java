@@ -4,9 +4,11 @@ import b.s.wordle.dto.GuessResult;
 import b.s.wordle.enums.SelectedOption;
 
 public interface GameView {
+    void clearView();
     void showTutorial();
     void showMenuOptions();
     void showGameExitMessage();
+    void showNewGameStartedMessage();
     void showBadMenuSelectionMessage();
 
     String readGuess();

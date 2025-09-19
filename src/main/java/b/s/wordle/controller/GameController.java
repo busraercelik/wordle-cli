@@ -1,13 +1,18 @@
 package b.s.wordle.controller;
 
+import b.s.wordle.dto.GuessRequest;
+import b.s.wordle.dto.GuessResult;
+import b.s.wordle.service.WordleGameService;
 import b.s.wordle.view.GameView;
 
 public class GameController {
 
     private final GameView gameView;
+    private final WordleGameService wordleGameService;
 
-    public GameController(GameView gameView) {
+    public GameController(GameView gameView, WordleGameService wordleGameService) {
         this.gameView = gameView;
+        this.wordleGameService = wordleGameService;
     }
 
     public void showMenu() {
@@ -16,16 +21,31 @@ public class GameController {
              switch (gameView.readMenuSelection()){
                  case START_NEW_GAME -> startGame();
                  case SHOW_TUTORIAL -> gameView.showTutorial();
+                 case BAD_SELECTION -> gameView.showBadMenuSelectionMessage();
+
                  case EXIT -> {
                      gameView.showGameExitMessage();
                      System.exit(0);
                  }
-                 case BAD_SELECTION -> gameView.showBadMenuSelectionMessage();
              }
         }
     }
 
     public void startGame() {
+        wordleGameService.createNewGame();
+        gameView.showNewGameStartedMessage();
+        while(true){
+            String input = gameView.readGuess();
 
+            //give up!
+            if(input.equalsIgnoreCase("x")) {
+                gameView.clearView();
+                gameView.showMenuOptions();
+                return;
+            }
+
+            GuessResult guessResult = wordleGameService.evaluateGuess(new GuessRequest(input));
+            gameView.writeGuessResult(guessResult);
+        }
     }
 }

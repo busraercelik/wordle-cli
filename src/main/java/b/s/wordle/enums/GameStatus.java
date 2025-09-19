@@ -1,5 +1,5 @@
 package b.s.wordle.enums;
 
-public enum GameState {
+public enum GameStatus {
     LOST, WON, IN_PROGRESS
 }

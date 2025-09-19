@@ -2,7 +2,8 @@ package b.s.wordle.view;
 
 import b.s.wordle.dto.GuessCharacter;
 import b.s.wordle.dto.GuessResult;
-import b.s.wordle.enums.GameState;
+import b.s.wordle.dto.WordleGameState;
+import b.s.wordle.enums.GameStatus;
 import b.s.wordle.enums.SelectedOption;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
@@ -14,9 +15,11 @@ import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
 
-public class ConsoleGameView implements GameView {
+public class ConsoleGameViewImpl implements GameView {
 
     // ANSI color codes
+    private static final String CLEAR_SCREEN = "\u001B[2J";
+    private static final String CURSOR_HOME  = "\u001B[H";
     private static final String RESET  = "\u001B[0m";
     private static final String GREEN  = "\u001B[42;30m";  // black text on green bg
     private static final String YELLOW = "\u001B[43;30m";  // black text on yellow bg
@@ -26,7 +29,7 @@ public class ConsoleGameView implements GameView {
     private final LineReader reader;
     private final PrintWriter writer;
 
-    public ConsoleGameView() throws IOException {
+    public ConsoleGameViewImpl() throws IOException {
         this.terminal = TerminalBuilder.builder().build();
         this.writer = this.terminal.writer();
         this.reader = LineReaderBuilder.builder().terminal(terminal).build();
@@ -55,6 +58,16 @@ public class ConsoleGameView implements GameView {
     }
 
     @Override
+    public void showNewGameStartedMessage() {
+        writer.write("""
+                You can input 'X' and press enter to give up!
+                
+                New word selected.. Take a guess!
+                """);
+        writer.flush();
+    }
+
+    @Override
     public void showBadMenuSelectionMessage() {
         writer.write("Please enter a valid option!");
         writer.write(">>");
@@ -71,6 +84,12 @@ public class ConsoleGameView implements GameView {
         } catch (Exception e){
             return SelectedOption.BAD_SELECTION;
         }
+    }
+
+    @Override
+    public void clearView() {
+        terminal.puts(org.jline.utils.InfoCmp.Capability.clear_screen);
+        terminal.flush();
     }
 
     @Override
@@ -137,12 +156,15 @@ public class ConsoleGameView implements GameView {
                     .append(RESET)
                     .append(" ");
         }
-        writer.println(sb + " attempts left: " + guessResult.guessesLeft());
 
+        WordleGameState wordleGameState = guessResult.gameStatus();
+        writer.println(sb + " attempts left: " + wordleGameState.getAttemptsRemaining());
+
+        GameStatus gameStatus = wordleGameState.getGameStatus();
         // Then print final messages if game ended
-        if (guessResult.gameState() == GameState.WON) {
+        if (gameStatus == GameStatus.WON) {
             writer.println("Congratulations! You guessed the word!");
-        } else if (guessResult.gameState() == GameState.LOST) {
+        } else if (gameStatus == GameStatus.LOST) {
             writer.println("Game over! You ran out of attempts.");
             // reveal the hidden word if GuessResult carries it
             String hiddenWord = guessedWord.stream()
