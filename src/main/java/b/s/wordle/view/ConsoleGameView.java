@@ -3,6 +3,7 @@ package b.s.wordle.view;
 import b.s.wordle.dto.GuessCharacter;
 import b.s.wordle.dto.GuessResult;
 import b.s.wordle.enums.GameState;
+import b.s.wordle.enums.SelectedOption;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
 import org.jline.terminal.Terminal;
@@ -10,6 +11,7 @@ import org.jline.terminal.TerminalBuilder;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.List;
 
 public class ConsoleGameView implements GameView {
@@ -28,6 +30,47 @@ public class ConsoleGameView implements GameView {
         this.terminal = TerminalBuilder.builder().build();
         this.writer = this.terminal.writer();
         this.reader = LineReaderBuilder.builder().terminal(terminal).build();
+    }
+
+    @Override
+    public void showMenuOptions() {
+        writer.println("""
+                Designed & developed by Busra Ercelik (bsr.ercelik@gmail.com)!
+                
+                Welcome to wordle.
+                Choose from the options below.
+                
+                1. Show tutorial.
+                2. Start new game.
+                3. Exit.
+                """);
+        writer.write(">>");
+        writer.flush();
+    }
+
+    @Override
+    public void showGameExitMessage() {
+        writer.println("Bye Bye!");
+        writer.flush();
+    }
+
+    @Override
+    public void showBadMenuSelectionMessage() {
+        writer.write("Please enter a valid option!");
+        writer.write(">>");
+        writer.flush();
+    }
+
+    @Override
+    public SelectedOption readMenuSelection() {
+        try {
+            String selectionString = reader.readLine();
+            int selectedInt = Integer.parseInt(selectionString);
+            return Arrays.stream(SelectedOption.values()).filter(s-> s.selection==selectedInt)
+                    .findFirst().orElse(SelectedOption.BAD_SELECTION);
+        } catch (Exception e){
+            return SelectedOption.BAD_SELECTION;
+        }
     }
 
     @Override
@@ -63,6 +106,7 @@ public class ConsoleGameView implements GameView {
             Keep guessing until you solve the word—or run out of attempts.
             """);
 
+        writer.write(">>");
         writer.flush();
     }
 
@@ -107,6 +151,7 @@ public class ConsoleGameView implements GameView {
             writer.println("The word was: " + hiddenWord);
         }
 
+        writer.write(">>");
         writer.flush();
     }
 
