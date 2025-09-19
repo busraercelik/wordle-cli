@@ -13,8 +13,7 @@ public class WordleGameServiceImpl implements WordleGameService {
     private final WordRepository wordRepository;
     private final List<WordleGameRule> wordleGameRules;
 
-    public WordleGameServiceImpl(
-            WordRepository wordRepository, List<WordleGameRule> wordleGameRules) {
+    public WordleGameServiceImpl(WordRepository wordRepository, List<WordleGameRule> wordleGameRules) {
         this.wordRepository = wordRepository;
         this.wordleGameRules = wordleGameRules;
     }

@@ -1,8 +1,8 @@
 package b.s.wordle.repo;
 
-import java.util.List;
+import java.util.Set;
 
 public interface WordRepository {
-    List<String> getAllWords();
+    Set<String> getAllWords();
     boolean existsIgnoreCase(String word);
 }

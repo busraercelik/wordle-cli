@@ -17,7 +17,7 @@ public class WordleGame {
 
     public static void main(String[] args) throws IOException {
         GameView gameView = new ConsoleGameViewImpl(args[0].equalsIgnoreCase("debug"));
-        WordRepository wordRepository = new WordRepositoryFileImpl();
+        WordRepository wordRepository = new WordRepositoryFileImpl("words.txt");
 
         WordleGameService wordleGameService = new WordleGameServiceImpl(
                 wordRepository, List.of(new WordleGameExactMatchRule(), new WordleGameMismatchingCharRule()));
