@@ -33,7 +33,8 @@ public class GameController {
     }
 
     public void startGame() {
-        wordleGameService.createNewGame();
+        WordleGameState newGame = wordleGameService.createNewGame();
+        gameView.printDebugInfo("hidden word -> "+ newGame.getHiddenWord());
         gameView.showNewGameStartedMessage();
         while(true){
             String input = gameView.readGuess();

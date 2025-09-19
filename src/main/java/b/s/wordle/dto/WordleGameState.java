@@ -32,4 +32,13 @@ public class WordleGameState {
     public void setGameStatus(GameStatus gameStatus) {
         this.gameStatus = gameStatus;
     }
+
+    @Override
+    public String toString() {
+        return "WordleGameState{" +
+                "attemptsRemaining=" + attemptsRemaining +
+                ", gameStatus=" + gameStatus +
+                ", hiddenWord='" + hiddenWord + '\'' +
+                '}';
+    }
 }

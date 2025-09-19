@@ -11,7 +11,7 @@ import java.io.IOException;
 public class WordleGame {
 
     public static void main(String[] args) throws IOException {
-        GameView gameView = new ConsoleGameViewImpl();
+        GameView gameView = new ConsoleGameViewImpl(args[0].equalsIgnoreCase("debug"));
         WordleGameService wordleGameService = new WordleGameServiceImpl();
         GameController wordleGameController = new GameController(gameView, wordleGameService);
         wordleGameController.showMenu();

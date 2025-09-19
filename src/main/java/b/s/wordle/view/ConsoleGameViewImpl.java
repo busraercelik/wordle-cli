@@ -18,21 +18,21 @@ import java.util.List;
 public class ConsoleGameViewImpl implements GameView {
 
     // ANSI color codes
-    private static final String CLEAR_SCREEN = "\u001B[2J";
-    private static final String CURSOR_HOME  = "\u001B[H";
     private static final String RESET  = "\u001B[0m";
     private static final String GREEN  = "\u001B[42;30m";  // black text on green bg
     private static final String YELLOW = "\u001B[43;30m";  // black text on yellow bg
     private static final String GRAY   = "\u001B[100;37m"; // white text on gray bg
 
+    private final boolean debugMode;
     private final Terminal terminal;
     private final LineReader reader;
     private final PrintWriter writer;
 
-    public ConsoleGameViewImpl() throws IOException {
+    public ConsoleGameViewImpl(boolean debugMode) throws IOException {
         this.terminal = TerminalBuilder.builder().build();
         this.writer = this.terminal.writer();
         this.reader = LineReaderBuilder.builder().terminal(terminal).build();
+        this.debugMode = debugMode;
     }
 
     @Override
@@ -84,6 +84,13 @@ public class ConsoleGameViewImpl implements GameView {
         } catch (Exception e){
             return SelectedOption.BAD_SELECTION;
         }
+    }
+
+    @Override
+    public void printDebugInfo(String debugInfo) {
+        if(!this.debugMode) return;
+        writer.println("[DEBUG] "+debugInfo);
+        writer.flush();
     }
 
     @Override

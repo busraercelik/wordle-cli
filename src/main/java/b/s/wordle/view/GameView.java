@@ -4,6 +4,8 @@ import b.s.wordle.dto.GuessResult;
 import b.s.wordle.enums.SelectedOption;
 
 public interface GameView {
+    void printDebugInfo(String debugInfo);
+
     void clearView();
     void showTutorial();
     void showMenuOptions();
