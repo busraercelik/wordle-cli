@@ -2,6 +2,7 @@ package b.s.wordle.controller;
 
 import b.s.wordle.dto.GuessRequest;
 import b.s.wordle.dto.GuessResult;
+import b.s.wordle.dto.WordleGameState;
 import b.s.wordle.service.WordleGameService;
 import b.s.wordle.view.GameView;
 
@@ -36,6 +37,8 @@ public class GameController {
         gameView.showNewGameStartedMessage();
         while(true){
             String input = gameView.readGuess();
+            //empty input
+            if(input.trim().isEmpty()) continue;
 
             //give up!
             if(input.equalsIgnoreCase("x")) {
@@ -44,6 +47,7 @@ public class GameController {
                 return;
             }
 
+            //valid game input
             GuessResult guessResult = wordleGameService.evaluateGuess(new GuessRequest(input));
             gameView.writeGuessResult(guessResult);
         }
