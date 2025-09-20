@@ -174,10 +174,7 @@ public class ConsoleGameViewImpl implements GameView {
         } else if (gameStatus == GameStatus.LOST) {
             writer.println("Game over! You ran out of attempts.");
             // reveal the hidden word if GuessResult carries it
-            String hiddenWord = guessedWord.stream()
-                    .map(gc -> String.valueOf(Character.toUpperCase(gc.ch())))
-                    .reduce("", String::concat);
-            writer.println("The word was: " + hiddenWord);
+            writer.println("The word was: " + wordleGameState.getHiddenWord());
         }
 
         writer.write(">>");
