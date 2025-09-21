@@ -32,7 +32,7 @@ class WordRepositoryFileImplTest {
         wordRepository = new WordRepositoryFileImpl(tempFile.toAbsolutePath().toString());
         Assertions.assertEquals(
                 Set.of("WATER", "OTTER", "HASTE", "HASTY", "ANGRY", "ROBOT"),
-                wordRepository.getAllWords(), "Words did not match!"
+                Set.copyOf(wordRepository.getAllWords()), "Words did not match!"
         );
     }
 

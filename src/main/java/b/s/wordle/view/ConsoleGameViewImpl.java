@@ -64,6 +64,7 @@ public class ConsoleGameViewImpl implements GameView {
                 
                 New word selected.. Take a guess!
                 """);
+        writer.write(">>");
         writer.flush();
     }
 
@@ -129,7 +130,7 @@ public class ConsoleGameViewImpl implements GameView {
 
         writer.write("""
 
-            Keep guessing until you solve the word—or run out of attempts.
+            Keep guessing until you solve the word or run out of attempts.
             """);
 
         writer.write(">>");

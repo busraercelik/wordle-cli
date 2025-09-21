@@ -9,38 +9,61 @@ import b.s.wordle.repo.WordRepository;
 import b.s.wordle.repo.WordleGameStateRepository;
 import b.s.wordle.rules.WordleGameExactMatchRule;
 import b.s.wordle.rules.WordleGameMismatchingCharRule;
-import b.s.wordle.rules.WordleGameRule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static b.s.wordle.enums.GameStatus.*;
 import static b.s.wordle.enums.GuessColor.GREY;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class WordleGameServiceImplTest {
 
-    WordleGameServiceImpl wordleGameService;
+    @Mock
+    Random randomGenerator;
+    @Mock
+    WordRepository wordRepository;
     @Mock
     WordleGameExactMatchRule exactRule;
     @Mock
     WordleGameMismatchingCharRule mismatchRule;
     @Mock
-    WordRepository wordRepository;
-    @Mock
     WordleGameStateRepository wordleGameStateRepository;
+
+    @Captor
+    ArgumentCaptor<WordleGameState> wordleGameStateArgumentCaptor;
+
+    WordleGameServiceImpl wordleGameService;
 
     @BeforeEach
     void setup() {
-        List<WordleGameRule> gameRules = List.of(exactRule, mismatchRule);
-        wordleGameService = new WordleGameServiceImpl(wordRepository, gameRules, wordleGameStateRepository);
+        wordleGameService = new WordleGameServiceImpl(wordRepository,
+                randomGenerator, wordleGameStateRepository, List.of(exactRule, mismatchRule));
+    }
+
+    @Test
+    void createNewGame() {
+        List<String> citiesWordle = List.of("BURSA", "IZMIR", "PARIS");
+        when(wordRepository.getAllWords()).thenReturn(citiesWordle);
+        when(randomGenerator.nextInt(citiesWordle.size())).thenReturn(1); //select IZMIR
+        WordleGameState expectedGameState = new WordleGameState("IZMIR", 5);
+        when(wordleGameStateRepository.save(
+                wordleGameStateArgumentCaptor.capture())).thenReturn(expectedGameState);
+
+        wordleGameService.createNewGame();
+        // state created to save
+        WordleGameState createdState = wordleGameStateArgumentCaptor.getValue();
+        assertEquals(expectedGameState, createdState);
     }
 
     @Test
@@ -129,4 +152,5 @@ class WordleGameServiceImplTest {
         }
         return mockGuessCharacters;
     }
+
 }

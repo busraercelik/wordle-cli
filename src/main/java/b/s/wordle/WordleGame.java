@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import static b.s.wordle.constant.GameConstants.*;
@@ -29,9 +30,9 @@ public class WordleGame {
         GameView gameView = new ConsoleGameViewImpl(mode.equalsIgnoreCase(DEBUG_MODE));
         WordRepository wordRepository = new WordRepositoryFileImpl(wordFile);
 
-        WordleGameService wordleGameService = new WordleGameServiceImpl(wordRepository,
-                List.of(new WordleGameExactMatchRule(), new WordleGameMismatchingCharRule()),
-                new WordleGameStateRepositoryInMemoryImpl()
+        WordleGameService wordleGameService = new WordleGameServiceImpl(
+                wordRepository, new Random(), new WordleGameStateRepositoryInMemoryImpl(),
+                List.of(new WordleGameExactMatchRule(), new WordleGameMismatchingCharRule())
         );
 
         GameController wordleGameController = new GameController(gameView, wordleGameService);

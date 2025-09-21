@@ -12,25 +12,31 @@ import b.s.wordle.rules.WordleGameRule;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.random.RandomGenerator;
 
 import static b.s.wordle.enums.GuessColor.*;
 
 public class WordleGameServiceImpl implements WordleGameService {
 
     private final WordRepository wordRepository;
+    private final RandomGenerator randomGenerator;
     private final List<WordleGameRule> wordleGameRules;
     private final WordleGameStateRepository wordleGameStateRepository;
 
-    public WordleGameServiceImpl(WordRepository wordRepository,
-            List<WordleGameRule> wordleGameRules, WordleGameStateRepository wordleGameStateRepository) {
+    public WordleGameServiceImpl(
+            WordRepository wordRepository, RandomGenerator randomGenerator,
+            WordleGameStateRepository wordleGameStateRepository, List<WordleGameRule> wordleGameRules) {
         this.wordRepository = wordRepository;
+        this.randomGenerator = randomGenerator;
         this.wordleGameRules = wordleGameRules;
         this.wordleGameStateRepository = wordleGameStateRepository;
     }
 
     @Override
     public WordleGameState createNewGame() {
-        return null;
+        List<String> allWords = wordRepository.getAllWords();
+        String hiddenWord = allWords.get(randomGenerator.nextInt(allWords.size()));
+        return wordleGameStateRepository.save(new WordleGameState(hiddenWord,5));
     }
 
     @Override
