@@ -23,7 +23,7 @@ public class WordleGameMismatchingCharRule implements WordleGameRule {
         for (int i=0; i<hiddenWord.length(); i++) {
             char guessChar = guessRequest.guess().charAt(i);
 
-            if (hiddenCharIndicesMap.containsKey(guessChar)) {
+            if (hiddenCharIndicesMap.containsKey(Character.toUpperCase(guessChar))) {
                 List<Integer> indices = hiddenCharIndicesMap.get(guessChar);
                 // if any indices is same then it should be GREY, if no indice match then YELLOW.
                 guessCharacters.add(new GuessCharacter(guessChar, indices.contains(i) ? GREY : YELLOW));

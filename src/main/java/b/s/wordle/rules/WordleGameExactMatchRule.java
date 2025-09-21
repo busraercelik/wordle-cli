@@ -17,8 +17,8 @@ public class WordleGameExactMatchRule implements WordleGameRule{
         List<GuessCharacter> characters = new ArrayList<>();
 
         for (int i=0; i<guessWordLen; i++) {
-            characters.add(new GuessCharacter(guessRequest.guess().charAt(i),
-                    guessRequest.guess().charAt(i) == hiddenWord.charAt(i) ? GREEN : GREY));
+            char ch = Character.toUpperCase(guessRequest.guess().charAt(i));
+            characters.add(new GuessCharacter(ch, ch == hiddenWord.charAt(i) ? GREEN : GREY));
         }
         
         return characters;

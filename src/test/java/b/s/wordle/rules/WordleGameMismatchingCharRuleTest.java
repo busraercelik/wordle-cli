@@ -26,23 +26,23 @@ class WordleGameMismatchingCharRuleTest {
 
     @Test
     void evaluateGuess_withMatchingCharsInDifferentPositions_returnsCharactersInYellow() {
-        GuessRequest guessRequest = new GuessRequest("MANGO");
-        String hiddenWord = "AMBER"; // 'A' and 'M' are common chars
+        GuessRequest guessRequest = new GuessRequest("CAIRO");
+        String hiddenWord = "SEOUL"; // 'A' and 'M' are common chars
         List<GuessCharacter> guessCharacters = wordleGameMismatchingCharRule.evaluateGuess(guessRequest, hiddenWord);
 
-        assertEquals(YELLOW, guessCharacters.get(0).color());
-        assertEquals('M', guessCharacters.get(0).ch());
+        assertEquals(GREY, guessCharacters.get(0).color());
+        assertEquals('C', guessCharacters.get(0).ch());
 
-        assertEquals(YELLOW, guessCharacters.get(1).color()); //A
+        assertEquals(GREY, guessCharacters.get(1).color()); //A
         assertEquals('A', guessCharacters.get(1).ch());
 
         assertEquals(GREY, guessCharacters.get(2).color()); //N
-        assertEquals('N', guessCharacters.get(2).ch());
+        assertEquals('I', guessCharacters.get(2).ch());
 
         assertEquals(GREY, guessCharacters.get(3).color()); //G
-        assertEquals('G', guessCharacters.get(3).ch());
+        assertEquals('R', guessCharacters.get(3).ch());
 
-        assertEquals(GREY, guessCharacters.get(4).color()); //O
+        assertEquals(YELLOW, guessCharacters.get(4).color()); //O
         assertEquals('O', guessCharacters.get(4).ch());
     }
 
