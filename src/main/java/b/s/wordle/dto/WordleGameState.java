@@ -2,10 +2,18 @@ package b.s.wordle.dto;
 
 import b.s.wordle.enums.GameStatus;
 
+import java.util.Objects;
+
 public class WordleGameState {
     private int attemptsRemaining;
     private GameStatus gameStatus;
     private final String hiddenWord;
+
+    public WordleGameState(WordleGameState state){
+        this.gameStatus = state.gameStatus;
+        this.hiddenWord = state.hiddenWord;
+        this.attemptsRemaining = state.attemptsRemaining;
+    }
 
     public WordleGameState(String hiddenWord, int maxAttempts) {
         this.hiddenWord = hiddenWord;
@@ -40,5 +48,16 @@ public class WordleGameState {
                 ", gameStatus=" + gameStatus +
                 ", hiddenWord='" + hiddenWord + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof WordleGameState that)) return false;
+        return attemptsRemaining == that.attemptsRemaining && gameStatus == that.gameStatus && Objects.equals(hiddenWord, that.hiddenWord);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(attemptsRemaining, gameStatus, hiddenWord);
     }
 }

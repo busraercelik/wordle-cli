@@ -3,6 +3,7 @@ package b.s.wordle;
 import b.s.wordle.controller.GameController;
 import b.s.wordle.repo.WordRepository;
 import b.s.wordle.repo.WordRepositoryFileImpl;
+import b.s.wordle.repo.WordleGameStateRepositoryInMemoryImpl;
 import b.s.wordle.rules.WordleGameExactMatchRule;
 import b.s.wordle.rules.WordleGameMismatchingCharRule;
 import b.s.wordle.service.WordleGameServiceImpl;
@@ -28,8 +29,10 @@ public class WordleGame {
         GameView gameView = new ConsoleGameViewImpl(mode.equalsIgnoreCase(DEBUG_MODE));
         WordRepository wordRepository = new WordRepositoryFileImpl(wordFile);
 
-        WordleGameService wordleGameService = new WordleGameServiceImpl(
-                wordRepository, List.of(new WordleGameExactMatchRule(), new WordleGameMismatchingCharRule()));
+        WordleGameService wordleGameService = new WordleGameServiceImpl(wordRepository,
+                List.of(new WordleGameExactMatchRule(), new WordleGameMismatchingCharRule()),
+                new WordleGameStateRepositoryInMemoryImpl()
+        );
 
         GameController wordleGameController = new GameController(gameView, wordleGameService);
         wordleGameController.showMenu();

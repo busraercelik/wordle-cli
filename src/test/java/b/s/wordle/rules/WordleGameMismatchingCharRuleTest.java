@@ -53,7 +53,7 @@ class WordleGameMismatchingCharRuleTest {
         String hiddenWord = "TOOTH"; // 'O' should be GREY color, 'T' should be YELLOW color
         List<GuessCharacter> guessCharacters = wordleGameMismatchingCharRule.evaluateGuess(guessRequest, hiddenWord);
 
-        assertEquals(GREY, guessCharacters.get(0).color());
+        assertEquals(GREY, guessCharacters.get(0).color()); //M
         assertEquals('M', guessCharacters.get(0).ch());
 
         assertEquals(GREY, guessCharacters.get(1).color()); //A
