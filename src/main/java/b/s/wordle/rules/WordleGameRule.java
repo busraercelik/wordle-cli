@@ -6,5 +6,5 @@ import b.s.wordle.dto.GuessRequest;
 import java.util.List;
 
 public interface WordleGameRule {
-    List<GuessCharacter> evaluateGuess(GuessRequest guessRequest, String hiddenWord) throws Exception;
+    List<GuessCharacter> evaluateGuess(GuessRequest guessRequest, String hiddenWord);
 }

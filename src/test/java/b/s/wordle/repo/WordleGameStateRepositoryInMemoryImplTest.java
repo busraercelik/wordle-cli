@@ -1,6 +1,7 @@
 package b.s.wordle.repo;
 
 import b.s.wordle.dto.WordleGameState;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static b.s.wordle.enums.GameStatus.WON;
@@ -10,7 +11,12 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class WordleGameStateRepositoryInMemoryImplTest {
 
-    WordleGameStateRepositoryInMemoryImpl repositoryInMemory = new WordleGameStateRepositoryInMemoryImpl();
+    WordleGameStateRepositoryInMemoryImpl repositoryInMemory;
+
+    @BeforeEach
+    void setup(){
+        repositoryInMemory = new WordleGameStateRepositoryInMemoryImpl();
+    }
 
     @Test
     void verifySaveGameState() {

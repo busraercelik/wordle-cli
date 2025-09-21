@@ -164,7 +164,7 @@ public class ConsoleGameViewImpl implements GameView {
                     .append(" ");
         }
 
-        WordleGameState wordleGameState = guessResult.gameStatus();
+        WordleGameState wordleGameState = guessResult.gameState();
         writer.println(sb + " attempts left: " + wordleGameState.getAttemptsRemaining());
 
         GameStatus gameStatus = wordleGameState.getGameStatus();

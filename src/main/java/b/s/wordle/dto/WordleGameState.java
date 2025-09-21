@@ -45,7 +45,7 @@ public class WordleGameState {
     public String toString() {
         return "WordleGameState{" +
                 "attemptsRemaining=" + attemptsRemaining +
-                ", gameStatus=" + gameStatus +
+                ", gameState=" + gameStatus +
                 ", hiddenWord='" + hiddenWord + '\'' +
                 '}';
     }

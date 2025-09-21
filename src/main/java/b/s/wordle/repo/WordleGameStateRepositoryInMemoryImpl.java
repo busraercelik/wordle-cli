@@ -8,7 +8,7 @@ public class WordleGameStateRepositoryInMemoryImpl implements WordleGameStateRep
 
     @Override
     public WordleGameState get() {
-        return wordleGameState;
+        return new WordleGameState(wordleGameState);
     }
 
     @Override
