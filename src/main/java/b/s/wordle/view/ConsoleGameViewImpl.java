@@ -18,10 +18,10 @@ import java.util.List;
 public class ConsoleGameViewImpl implements GameView {
 
     // ANSI color codes
-    private static final String RESET  = "\u001B[0m";
-    private static final String GREEN  = "\u001B[42;30m";  // black text on green bg
-    private static final String YELLOW = "\u001B[43;30m";  // black text on yellow bg
-    private static final String GRAY   = "\u001B[100;37m"; // white text on gray bg
+    private static final String CONSOLE_COLOR_RESET = "\u001B[0m";
+    private static final String CONSOLE_COLOR_GREEN = "\u001B[42;30m";  // black text on green bg
+    private static final String CONSOLE_COLOR_YELLOW = "\u001B[43;30m";  // black text on yellow bg
+    private static final String CONSOLE_COLOR_GRAY = "\u001B[100;37m"; // white text on gray bg
 
     private final boolean debugMode;
     private final Terminal terminal;
@@ -48,7 +48,6 @@ public class ConsoleGameViewImpl implements GameView {
                 2. Start new game.
                 3. Exit.
                 """);
-        writer.write(">>");
         writer.flush();
     }
 
@@ -65,21 +64,19 @@ public class ConsoleGameViewImpl implements GameView {
                 
                 New word selected.. Take a guess!
                 """);
-        writer.write(">>");
         writer.flush();
     }
 
     @Override
-    public void showBadMenuSelectionMessage() {
-        writer.write("Please enter a valid option!");
-        writer.write(">>");
+    public void showInvalidInputMessage(String helpText) {
+        writer.println("Invalid input : "+helpText);
         writer.flush();
     }
 
     @Override
     public SelectedOption readMenuSelection() {
         try {
-            String selectionString = reader.readLine();
+            String selectionString = reader.readLine(">> ");
             int selectedInt = Integer.parseInt(selectionString);
             return Arrays.stream(SelectedOption.values()).filter(s-> s.selection==selectedInt)
                     .findFirst().orElse(SelectedOption.BAD_SELECTION);
@@ -113,11 +110,11 @@ public class ConsoleGameViewImpl implements GameView {
             
             """);
 
-        writer.printf("    %s S %s → Correct letter, correct spot.%n", GREEN, RESET);
-        writer.printf("    %s T %s → Correct letter, correct spot.%n", GREEN, RESET);
-        writer.printf("    %s R %s → Letter is in the word, but in a different position.%n", YELLOW, RESET);
-        writer.printf("    %s A %s → Letter is not in the word.%n", GRAY, RESET);
-        writer.printf("    %s W %s → Letter is not in the word.%n", GRAY, RESET);
+        writer.printf("    %s S %s → Correct letter, correct spot.%n", CONSOLE_COLOR_GREEN, CONSOLE_COLOR_RESET);
+        writer.printf("    %s T %s → Correct letter, correct spot.%n", CONSOLE_COLOR_GREEN, CONSOLE_COLOR_RESET);
+        writer.printf("    %s R %s → Letter is in the word, but in a different position.%n", CONSOLE_COLOR_YELLOW, CONSOLE_COLOR_RESET);
+        writer.printf("    %s A %s → Letter is not in the word.%n", CONSOLE_COLOR_GRAY, CONSOLE_COLOR_RESET);
+        writer.printf("    %s W %s → Letter is not in the word.%n", CONSOLE_COLOR_GRAY, CONSOLE_COLOR_RESET);
 
         writer.write("""
 
@@ -127,20 +124,18 @@ public class ConsoleGameViewImpl implements GameView {
             """);
 
         writer.printf("    %s S %s %s T %s %s R %s %s A %s %s W %s%n",
-                GREEN, RESET, GREEN, RESET, YELLOW, RESET, GRAY, RESET, GRAY, RESET);
+                CONSOLE_COLOR_GREEN, CONSOLE_COLOR_RESET, CONSOLE_COLOR_GREEN, CONSOLE_COLOR_RESET, CONSOLE_COLOR_YELLOW, CONSOLE_COLOR_RESET, CONSOLE_COLOR_GRAY, CONSOLE_COLOR_RESET, CONSOLE_COLOR_GRAY, CONSOLE_COLOR_RESET);
 
         writer.write("""
 
             Keep guessing until you solve the word or run out of attempts.
             """);
-
-        writer.write(">>");
         writer.flush();
     }
 
     @Override
     public String readInput() {
-        return reader.readLine();
+        return reader.readLine(">> ");
     }
 
     @Override
@@ -152,17 +147,17 @@ public class ConsoleGameViewImpl implements GameView {
         for (GuessCharacter gc : guessedWord) {
             String color;
             switch (gc.color()) {
-                case GREEN -> color = GREEN;
-                case YELLOW -> color = YELLOW;
-                case GREY   -> color = GRAY;
-                default     -> color = RESET;
+                case GREEN  -> color = CONSOLE_COLOR_GREEN;
+                case YELLOW -> color = CONSOLE_COLOR_YELLOW;
+                case GREY   -> color = CONSOLE_COLOR_GRAY;
+                default     -> color = CONSOLE_COLOR_RESET;
             }
 
             sb.append(color)
                     .append(" ")
                     .append(Character.toUpperCase(gc.ch()))
                     .append(" ")
-                    .append(RESET)
+                    .append(CONSOLE_COLOR_RESET)
                     .append(" ");
         }
 
@@ -173,15 +168,13 @@ public class ConsoleGameViewImpl implements GameView {
         // Then print final messages if game ended
         if (gameStatus == GameStatus.WON) {
             writer.println("Congratulations! You guessed the word!");
-            writer.println("Press any key to go back!");
+            writer.println("Press enter to go back to main menu.");
         } else if (gameStatus == GameStatus.LOST) {
             writer.println("Game over! You ran out of attempts.");
             // reveal the hidden word if GuessResult carries it
             writer.println("The word was: " + wordleGameState.getHiddenWord());
-            writer.println("Press any key to go back!");
+            writer.println("Press enter to go back to main menu.");
         }
-
-        writer.write(">>");
         writer.flush();
     }
 

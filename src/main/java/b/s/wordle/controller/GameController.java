@@ -26,7 +26,7 @@ public class GameController {
              switch (gameView.readMenuSelection()){
                  case START_NEW_GAME -> startGame();
                  case SHOW_TUTORIAL -> gameView.showTutorial();
-                 case BAD_SELECTION -> gameView.showBadMenuSelectionMessage();
+                 case BAD_SELECTION -> gameView.showInvalidInputMessage("enter \"1\" to show tutorial, \"2\" to start a new game, \"3\" to quit");
 
                  case EXIT -> {
                      gameView.showGameExitMessage();
@@ -56,6 +56,11 @@ public class GameController {
             if(input.equalsIgnoreCase(GIVE_UP)) {
                 gameView.showMenuOptions();
                 return;
+            }
+            //input of invalid size
+            if(input.trim().length()!=5) {
+                gameView.showInvalidInputMessage("enter a word 5 letter word or \"X\" to give up");
+                continue;
             }
 
             //valid game input

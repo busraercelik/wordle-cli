@@ -11,7 +11,7 @@ public interface GameView {
     void showMenuOptions();
     void showGameExitMessage();
     void showNewGameStartedMessage();
-    void showBadMenuSelectionMessage();
+    void showInvalidInputMessage(String helpText);
 
     String readInput();
     SelectedOption readMenuSelection();
