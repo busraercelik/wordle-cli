@@ -37,6 +37,7 @@ public class ConsoleGameViewImpl implements GameView {
 
     @Override
     public void showMenuOptions() {
+        clearView();
         writer.println("""
                 Designed & developed by Busra Ercelik (bsr.ercelik@gmail.com)!
                 
@@ -138,7 +139,7 @@ public class ConsoleGameViewImpl implements GameView {
     }
 
     @Override
-    public String readGuess() {
+    public String readInput() {
         return reader.readLine();
     }
 
@@ -172,10 +173,12 @@ public class ConsoleGameViewImpl implements GameView {
         // Then print final messages if game ended
         if (gameStatus == GameStatus.WON) {
             writer.println("Congratulations! You guessed the word!");
+            writer.println("Press any key to go back!");
         } else if (gameStatus == GameStatus.LOST) {
             writer.println("Game over! You ran out of attempts.");
             // reveal the hidden word if GuessResult carries it
             writer.println("The word was: " + wordleGameState.getHiddenWord());
+            writer.println("Press any key to go back!");
         }
 
         writer.write(">>");

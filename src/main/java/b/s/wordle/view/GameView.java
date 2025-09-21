@@ -13,7 +13,7 @@ public interface GameView {
     void showNewGameStartedMessage();
     void showBadMenuSelectionMessage();
 
-    String readGuess();
+    String readInput();
     SelectedOption readMenuSelection();
 
     void writeGuessResult(GuessResult guessResult);

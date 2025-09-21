@@ -3,6 +3,7 @@ package b.s.wordle.controller;
 import b.s.wordle.dto.GuessRequest;
 import b.s.wordle.dto.GuessResult;
 import b.s.wordle.dto.WordleGameState;
+import b.s.wordle.enums.GameStatus;
 import b.s.wordle.service.WordleGameService;
 import b.s.wordle.view.GameView;
 
@@ -39,14 +40,20 @@ public class GameController {
         WordleGameState newGame = wordleGameService.createNewGame();
         gameView.printDebugInfo("hidden word -> "+ newGame.getHiddenWord());
         gameView.showNewGameStartedMessage();
+
+        GameStatus status = GameStatus.IN_PROGRESS;
         while(true){
-            String input = gameView.readGuess();
+            String input = gameView.readInput();
+            if(status!= GameStatus.IN_PROGRESS) {
+                gameView.showMenuOptions();
+                return;
+            }
+
             //empty input
             if(input.trim().isEmpty()) continue;
 
             //give up!
             if(input.equalsIgnoreCase(GIVE_UP)) {
-                gameView.clearView();
                 gameView.showMenuOptions();
                 return;
             }
@@ -54,6 +61,7 @@ public class GameController {
             //valid game input
             GuessResult guessResult = wordleGameService.evaluateGuess(new GuessRequest(input));
             gameView.writeGuessResult(guessResult);
+            status = guessResult.gameState().getGameStatus();
         }
     }
 }
