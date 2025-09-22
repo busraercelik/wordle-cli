@@ -14,6 +14,9 @@ To give up, type `x` and press Enter. This will take you back to the main menu.
 ## How to Run
 To run the application, you can use the `play.sh` script:
 ```bash
+chmod +x build.sh
+chmod +x play.sh
+./build.sh
 ./play.sh
 ```
 To run the application in debug mode, you can use the following command:
