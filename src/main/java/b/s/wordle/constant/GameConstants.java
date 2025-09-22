@@ -11,7 +11,7 @@ public final class GameConstants {
     public static final String DEFAULT_WORD_FILE_NAME = "words.txt";
     public static final String DEFAULT_MODE = "normal";
     public static final Set<String> DEFAULT_WORDS = Set.of(
-            "Milan", "Paris", "Tokyo", "Dubai", "Seoul", "Miami", "Tampa", "Izmir", "Bursa", "Cairo");
+            "water", "otter", "hound", "pizza", "eagle", "fruit", "paper");
 
     public static final String GIVE_UP = "x";
     public static final char CONSUMED = '\0';

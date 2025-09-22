@@ -1,10 +1,7 @@
-Miami
-Tokyo
-Mecca
-Milan
-Seoul
-Quito
-Cairo
-Dubai
-Tampa
-Paris
+water
+otter
+hound
+pizza
+eagle
+fruit
+paper
