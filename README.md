@@ -34,3 +34,16 @@ The application is a simple command-line Wordle game built with Java. It follows
 - **Controller**: The `controller` package contains the `GameController` class, which handles user input and updates the model and view accordingly.
 
 The main entry point of the application is the `WordleGame` class. It initializes the game by creating the necessary objects and then shows the main menu. The game loop is handled by the `GameController`, which reads user input and calls the appropriate methods in the `WordleGameService` to update the game state. The `WordleGameService` contains the core game logic, such as creating a new game, evaluating a guess, and checking if the game is over.
+
+
+## Screenshots
+### Main Menu
+<img width="522" height="212" alt="image" src="https://github.com/user-attachments/assets/9b541f16-f8a0-426b-a4d9-9a8c3b843e17" />
+
+### Tutorial
+<img width="625" height="400" alt="image" src="https://github.com/user-attachments/assets/913ad9dc-2c2c-42eb-aeee-80c8d9a40e1a" />
+
+### Game
+<img width="609" height="448" alt="image" src="https://github.com/user-attachments/assets/96a30549-12a5-4e98-b9e3-eb8e0d70561b" />
+
+
