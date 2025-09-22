@@ -4,10 +4,9 @@ import b.s.wordle.controller.GameController;
 import b.s.wordle.repo.WordRepository;
 import b.s.wordle.repo.WordRepositoryFileImpl;
 import b.s.wordle.repo.WordleGameStateRepositoryInMemoryImpl;
-import b.s.wordle.rules.WordleGameExactMatchRule;
-import b.s.wordle.rules.WordleGameMismatchingCharRule;
-import b.s.wordle.service.WordleGameServiceImpl;
+import b.s.wordle.rules.WordleGameRuleImpl;
 import b.s.wordle.service.WordleGameService;
+import b.s.wordle.service.WordleGameServiceImpl;
 import b.s.wordle.util.ArgUtils;
 import b.s.wordle.view.ConsoleGameViewImpl;
 import b.s.wordle.view.GameView;
@@ -15,7 +14,6 @@ import b.s.wordle.view.GameView;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -31,9 +29,7 @@ public class WordleGame {
         WordRepository wordRepository = new WordRepositoryFileImpl(wordFile);
 
         WordleGameService wordleGameService = new WordleGameServiceImpl(
-                wordRepository, new Random(), new WordleGameStateRepositoryInMemoryImpl(),
-                List.of(new WordleGameExactMatchRule(), new WordleGameMismatchingCharRule())
-        );
+                wordRepository, new Random(), new WordleGameStateRepositoryInMemoryImpl(), new WordleGameRuleImpl());
 
         GameController wordleGameController = new GameController(gameView, wordleGameService);
         wordleGameController.showMenu();

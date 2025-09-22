@@ -7,8 +7,7 @@ import b.s.wordle.dto.WordleGameState;
 import b.s.wordle.enums.GuessColor;
 import b.s.wordle.repo.WordRepository;
 import b.s.wordle.repo.WordleGameStateRepository;
-import b.s.wordle.rules.WordleGameExactMatchRule;
-import b.s.wordle.rules.WordleGameMismatchingCharRule;
+import b.s.wordle.rules.WordleGameRuleImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +21,7 @@ import java.util.List;
 import java.util.Random;
 
 import static b.s.wordle.enums.GameStatus.*;
-import static b.s.wordle.enums.GuessColor.GREY;
+import static b.s.wordle.enums.GuessColor.NONE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -34,21 +33,19 @@ class WordleGameServiceImplTest {
     @Mock
     WordRepository wordRepository;
     @Mock
-    WordleGameExactMatchRule exactRule;
-    @Mock
-    WordleGameMismatchingCharRule mismatchRule;
+    WordleGameRuleImpl worldGameRule;
     @Mock
     WordleGameStateRepository wordleGameStateRepository;
 
     @Captor
     ArgumentCaptor<WordleGameState> wordleGameStateArgumentCaptor;
 
-    WordleGameServiceImpl wordleGameService;
+    WordleGameService wordleGameService;
 
     @BeforeEach
     void setup() {
-        wordleGameService = new WordleGameServiceImpl(wordRepository,
-                randomGenerator, wordleGameStateRepository, List.of(exactRule, mismatchRule));
+        wordleGameService = new WordleGameServiceImpl(
+                wordRepository, randomGenerator, wordleGameStateRepository, worldGameRule);
     }
 
     @Test
@@ -77,14 +74,13 @@ class WordleGameServiceImplTest {
 
         // When
         when(wordleGameStateRepository.get()).thenReturn(wordleGameState);
-        when(exactRule.evaluateGuess(guessRequest, hiddenWord)).thenReturn(getGuessCharacters(hiddenWord, GREY));
-        when(mismatchRule.evaluateGuess(guessRequest, hiddenWord)).thenReturn(getGuessCharacters(hiddenWord, GREY));
+        when(worldGameRule.evaluateGuess(guessRequest, hiddenWord)).thenReturn(getGuessCharacters(hiddenWord, NONE));
         when(wordleGameStateRepository.save(updatedWordleGameState)).thenReturn(updatedWordleGameState);
         GuessResult guessResult = wordleGameService.evaluateGuess(guessRequest);
 
         // Then
         assertEquals(LOST, guessResult.gameState().getGameStatus());
-        assertEquals(getGuessCharacters(hiddenWord, GREY), guessResult.guessedWord());
+        assertEquals(getGuessCharacters(hiddenWord, NONE), guessResult.guessedWord());
         assertEquals(0, guessResult.gameState().getAttemptsRemaining());
     }
 
@@ -94,15 +90,13 @@ class WordleGameServiceImplTest {
         String hiddenWord = "MANGO";
         GuessRequest guessRequest = new GuessRequest("MANGO");
         List<GuessCharacter> allGreenGuessChars = getGuessCharacters(hiddenWord, GuessColor.GREEN);
-        List<GuessCharacter> allGreyGuessChars = getGuessCharacters(hiddenWord, GREY);
         WordleGameState wordleGameState = new WordleGameState(hiddenWord, 5);
         WordleGameState updatedWordleGameState = new WordleGameState(hiddenWord, 4);
         updatedWordleGameState.setGameStatus(WON);
 
         // When
         when(wordleGameStateRepository.get()).thenReturn(wordleGameState);
-        when(exactRule.evaluateGuess(guessRequest, hiddenWord)).thenReturn(allGreenGuessChars);
-        when(mismatchRule.evaluateGuess(guessRequest, hiddenWord)).thenReturn(allGreyGuessChars);
+        when(worldGameRule.evaluateGuess(guessRequest, hiddenWord)).thenReturn(allGreenGuessChars);
         when(wordleGameStateRepository.save(updatedWordleGameState)).thenReturn(updatedWordleGameState);
         GuessResult guessResult = wordleGameService.evaluateGuess(guessRequest);
 
@@ -116,33 +110,26 @@ class WordleGameServiceImplTest {
         // Given
         String hiddenWord = "WATER";
         GuessRequest guessRequest = new GuessRequest("OTTER");
-        List<GuessCharacter> exactMathResults = List.of(
-                new GuessCharacter('O', GREY),
-                new GuessCharacter('T', GREY),
+        List<GuessCharacter> expectedResults = List.of(
+                new GuessCharacter('O', NONE),
+                new GuessCharacter('T', NONE),
                 new GuessCharacter('T', GuessColor.GREEN),
                 new GuessCharacter('E', GuessColor.GREEN),
                 new GuessCharacter('R', GuessColor.GREEN)
         );
-        List<GuessCharacter> mismatchingResults = List.of(
-                new GuessCharacter('O', GREY),
-                new GuessCharacter('T', GREY),
-                new GuessCharacter('T', GREY),
-                new GuessCharacter('E', GREY),
-                new GuessCharacter('R', GREY)
-        );
+
         WordleGameState wordleGameState = new WordleGameState(hiddenWord, 5);
         WordleGameState updatedWordleGameState = new WordleGameState(hiddenWord, 4);
 
         // When
         when(wordleGameStateRepository.get()).thenReturn(wordleGameState);
-        when(exactRule.evaluateGuess(guessRequest, hiddenWord)).thenReturn(exactMathResults);
-        when(mismatchRule.evaluateGuess(guessRequest, hiddenWord)).thenReturn(mismatchingResults);
+        when(worldGameRule.evaluateGuess(guessRequest, hiddenWord)).thenReturn(expectedResults);
         when(wordleGameStateRepository.save(updatedWordleGameState)).thenReturn(updatedWordleGameState);
         GuessResult guessResult = wordleGameService.evaluateGuess(guessRequest);
 
         // Then
         assertEquals(IN_PROGRESS, guessResult.gameState().getGameStatus());
-        assertEquals(exactMathResults, guessResult.guessedWord());
+        assertEquals(expectedResults, guessResult.guessedWord());
     }
 
     private static List<GuessCharacter> getGuessCharacters(String hiddenWord, GuessColor guessColor) {

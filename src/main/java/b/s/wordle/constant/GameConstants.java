@@ -14,4 +14,5 @@ public final class GameConstants {
             "Milan", "Paris", "Tokyo", "Dubai", "Seoul", "Miami", "Tampa", "Izmir", "Bursa", "Cairo");
 
     public static final String GIVE_UP = "x";
+    public static final char CONSUMED = '\0';
 }

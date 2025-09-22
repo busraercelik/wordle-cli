@@ -1,5 +1,6 @@
 package b.s.wordle.repo;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,6 +41,11 @@ class WordRepositoryFileImplTest {
     void existsIgnoreCase() {
         wordRepository = new WordRepositoryFileImpl(tempFile.toAbsolutePath().toString());
         Assertions.assertTrue(wordRepository.existsIgnoreCase("water"), "Word not found!");
+    }
+
+    @AfterEach
+    void cleanup() throws IOException {
+        Files.deleteIfExists(tempFile);
     }
 
 }

@@ -149,7 +149,7 @@ public class ConsoleGameViewImpl implements GameView {
             switch (gc.color()) {
                 case GREEN  -> color = CONSOLE_COLOR_GREEN;
                 case YELLOW -> color = CONSOLE_COLOR_YELLOW;
-                case GREY   -> color = CONSOLE_COLOR_GRAY;
+                case NONE -> color = CONSOLE_COLOR_GRAY;
                 default     -> color = CONSOLE_COLOR_RESET;
             }
 
